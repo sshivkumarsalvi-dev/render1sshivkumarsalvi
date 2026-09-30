@@ -1,0 +1,9 @@
+{
+  "provider": "gemini",
+  "endpoint_template": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+  "limits": {
+    "rpm": 15,
+    "rpd": 1500
+  },
+  "default_model": "gemini-2.5-flash"
+}
