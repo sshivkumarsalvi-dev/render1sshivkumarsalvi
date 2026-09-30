@@ -18,10 +18,10 @@ app.add_middleware(
 )
 
 CONFIG_FILES = {
-    "groq": "groq_config.json",
-    "gemini": "gemini_config.json",
-    "sambanova": "sambanova_config.json",
-    "openrouter": "openrouter_config.json",
+    "groq": "groq_models.json",
+    "gemini": "gemini_models.json",
+    "sambanova": "sambanova_models.json",
+    "openrouter": "openrouter_models.json",
     "hf_spaces": "hf_spaces.json"
 }
 
