@@ -1,0 +1,12 @@
+{
+  "provider": "hf_spaces",
+  "space_url": "https://jyoti-chet.hf.space",
+  "api_endpoint": "https://jyoti-chet.hf.space/api/predict",
+  "limits": {
+    "gpu_seconds_per_token": 300,
+    "cooldown_delay_seconds": 120,
+    "total_tokens": 10,
+    "max_execution_timeout": 60
+  },
+  "default_model": "Qwen-ZeroGPU-Core"
+}
