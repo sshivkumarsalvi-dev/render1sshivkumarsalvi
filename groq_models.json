@@ -1,0 +1,9 @@
+{
+  "provider": "groq",
+  "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+  "limits": {
+    "rpm": 30,
+    "rpd": 14400
+  },
+  "default_model": "llama-3.3-70b-versatile"
+}
