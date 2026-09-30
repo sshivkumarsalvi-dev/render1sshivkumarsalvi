@@ -1,9 +1,17 @@
 {
   "provider": "groq",
   "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+  "env_key": "GROQ_API_OK",
+  "default_model": "llama-3.3-70b-versatile",
   "limits": {
     "rpm": 30,
     "rpd": 14400
   },
-  "default_model": "llama-3.3-70b-versatile"
+  "runtime_state": {
+    "total_requests": 0,
+    "current_minute_requests": 0,
+    "last_minute_timestamp": 0.0,
+    "is_rate_limited": false,
+    "cooldown_until": 0.0
+  }
 }
