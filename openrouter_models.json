@@ -1,9 +1,17 @@
 {
   "provider": "openrouter",
   "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+  "env_key": "OPENROUTER-API-OK",
+  "default_model": "meta-llama/llama-3.3-70b-instruct:free",
   "limits": {
     "rpm": 20,
     "rpd": 200
   },
-  "default_model": "meta-llama/llama-3.3-70b-instruct:free"
+  "runtime_state": {
+    "total_requests": 0,
+    "current_minute_requests": 0,
+    "last_minute_timestamp": 0.0,
+    "is_rate_limited": false,
+    "cooldown_until": 0.0
+  }
 }
