@@ -1,9 +1,17 @@
 {
   "provider": "gemini",
   "endpoint_template": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+  "env_key": "GEMINI-API-OK",
+  "default_model": "gemini-2.5-flash",
   "limits": {
     "rpm": 15,
     "rpd": 1500
   },
-  "default_model": "gemini-2.5-flash"
+  "runtime_state": {
+    "total_requests": 0,
+    "current_minute_requests": 0,
+    "last_minute_timestamp": 0.0,
+    "is_rate_limited": false,
+    "cooldown_until": 0.0
+  }
 }
