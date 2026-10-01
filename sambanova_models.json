@@ -2,16 +2,63 @@
   "provider": "sambanova",
   "endpoint": "https://api.sambanova.ai/v1/chat/completions",
   "env_key": "SAMBANOVA-API-OK",
-  "default_model": "Meta-Llama-3.1-70B-Instruct",
   "limits": {
-    "rpm": 20,
-    "rpd": 5000
+    "global_rpm": 20,
+    "total_platform_daily_cap": 4200
   },
   "runtime_state": {
-    "total_requests": 0,
+    "total_requests_today": 0,
     "current_minute_requests": 0,
     "last_minute_timestamp": 0.0,
-    "is_rate_limited": false,
-    "cooldown_until": 0.0
+    "is_revoked": false,
+    "revoked_until": 0.0,
+    "last_daily_reset": 0.0
+  },
+  "models": {
+    "deep_reasoning": {
+      "id": "DeepSeek-R1",
+      "task": "math_logic_cot_deep_reasoning",
+      "supports_inputs": ["text"],
+      "rpd_limit": 200,
+      "rpm_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "general_reasoning": {
+      "id": "DeepSeek-V3",
+      "task": "general_heavy_reasoning",
+      "supports_inputs": ["text"],
+      "rpd_limit": 500,
+      "rpm_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "flagship_chat": {
+      "id": "Meta-Llama-3.3-70B-Instruct",
+      "task": "core_dialogue_and_long_context",
+      "supports_inputs": ["text"],
+      "rpd_limit": 1000,
+      "rpm_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "fast_chat": {
+      "id": "Meta-Llama-3.1-8B-Instruct",
+      "task": "low_latency_quick_chat",
+      "supports_inputs": ["text"],
+      "rpd_limit": 2000,
+      "rpm_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "multilingual_ocr": {
+      "id": "gemma-3-27b-it",
+      "task": "multilingual_ocr_vision_extraction",
+      "supports_inputs": ["text", "image_url"],
+      "rpd_limit": 500,
+      "rpm_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    }
   }
 }
