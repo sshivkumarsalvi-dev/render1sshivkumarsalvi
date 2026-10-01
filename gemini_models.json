@@ -3,81 +3,146 @@
   "rest_endpoint_template": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
   "websocket_live_endpoint": "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent",
   "env_key": "GEMINI-API-OK",
-  "limits": {
-    "total_daily_rpd_cap": 7500,
-    "free_monthly_search_grounding": 5000,
-    "daily_safe_search_quota": 160,
-    "live_concurrent_sessions": 3
+  "tool_limits": {
+    "search_grounding_rpd": 1500,
+    "map_grounding_rpd": 500
   },
   "runtime_state": {
-    "total_platform_requests_today": 0,
+    "total_requests_today": 0,
     "search_queries_used_today": 0,
+    "map_queries_used_today": 0,
     "is_revoked": false,
     "revoked_until": 0.0,
     "last_daily_reset": 0.0
   },
-  "ocr_vision_models": {
-    "flash_25_multimodal": {
-      "id": "gemini-2.5-flash",
-      "task": "dense_pdf_table_handwritten_ocr",
-      "supports": ["image", "pdf", "video", "audio"],
-      "rpd_limit": 1500,
-      "rpm_limit": 10,
-      "tpm_limit": 250000,
-      "used_today": 0,
-      "exhausted": false
-    },
-    "flash_20_multimodal": {
-      "id": "gemini-2.0-flash",
-      "task": "general_ocr_diagram_vision",
-      "supports": ["image", "pdf", "video"],
-      "rpd_limit": 1500,
-      "rpm_limit": 15,
-      "tpm_limit": 1000000,
-      "used_today": 0,
-      "exhausted": false
-    }
-  },
-  "text_and_logic_models": {
-    "flash_lite_fast": {
-      "id": "gemini-2.0-flash-lite",
-      "task": "fast_chat_translation_extraction",
-      "supports": ["text"],
-      "rpd_limit": 1500,
+  "heavy_gemma_pool": {
+    "gemma_4_31b": {
+      "id": "gemma-4-31b",
+      "task": "high_volume_ocr_vision_text",
       "rpm_limit": 30,
-      "tpm_limit": 1000000,
+      "tpm_limit": 16000,
+      "rpd_limit": 14400,
       "used_today": 0,
       "exhausted": false
     },
-    "flash_thinking_deep": {
-      "id": "gemini-2.0-flash-thinking-exp-01-21",
-      "task": "math_logic_cot_reasoning",
-      "supports": ["text"],
-      "rpd_limit": 1500,
-      "rpm_limit": 10,
-      "tpm_limit": 250000,
-      "used_today": 0,
-      "exhausted": false
-    },
-    "gemma_open_weights": {
-      "id": "gemma-2-27b-it",
-      "task": "multilingual_raw_text_generation",
-      "supports": ["text"],
-      "rpd_limit": 1500,
-      "rpm_limit": 15,
-      "tpm_limit": 1000000,
+    "gemma_4_26b": {
+      "id": "gemma-4-26b",
+      "task": "high_volume_text_chat",
+      "rpm_limit": 30,
+      "tpm_limit": 16000,
+      "rpd_limit": 14400,
       "used_today": 0,
       "exhausted": false
     }
   },
-  "live_voice_talk": {
-    "live_flash_voice": {
-      "id": "gemini-2.0-flash",
-      "protocol": "websocket_bidirectional",
-      "task": "realtime_voice_dialogue_camera",
-      "output_format": "audio/pcm;rate=24000",
-      "max_concurrent_sessions": 3,
-      "active_sessions": 0
+  "flash_lite_pool": {
+    "gemini_3_5_flash_lite": {
+      "id": "gemini-3.5-flash-lite",
+      "task": "fast_chat_ocr",
+      "rpm_limit": 15,
+      "tpm_limit": 250000,
+      "rpd_limit": 500,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_3_1_flash_lite": {
+      "id": "gemini-3.1-flash-lite",
+      "task": "fast_chat_ocr",
+      "rpm_limit": 15,
+      "tpm_limit": 250000,
+      "rpd_limit": 500,
+      "used_today": 0,
+      "exhausted": false
+    }
+  },
+  "flash_pool_strict_20": {
+    "gemini_3_8_flash": {
+      "id": "gemini-3.8-flash",
+      "rpm_limit": 5,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_3_7_flash": {
+      "id": "gemini-3.7-flash",
+      "rpm_limit": 5,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_3_6_flash": {
+      "id": "gemini-3.6-flash",
+      "rpm_limit": 5,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_3_5_flash": {
+      "id": "gemini-3.5-flash",
+      "rpm_limit": 5,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_3_flash": {
+      "id": "gemini-3-flash",
+      "rpm_limit": 5,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_2_5_flash": {
+      "id": "gemini-2.5-flash",
+      "rpm_limit": 5,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemini_2_5_flash_lite": {
+      "id": "gemini-2.5-flash-lite",
+      "rpm_limit": 10,
+      "tpm_limit": 250000,
+      "rpd_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    }
+  },
+  "live_voice_unlimited": {
+    "gemini_3_8_live_thinking": {
+      "id": "gemini-3.8-live-extended-thinking",
+      "task": "live_extended_thinking",
+      "rpm_limit": "unlimited",
+      "rpd_limit": "unlimited"
+    },
+    "gemini_3_8_live": {
+      "id": "gemini-3.8-live",
+      "task": "live_voice",
+      "rpm_limit": "unlimited",
+      "rpd_limit": "unlimited"
+    },
+    "gemini_3_5_live_translate": {
+      "id": "gemini-3.5-live-translate",
+      "task": "live_translation",
+      "rpm_limit": "unlimited",
+      "rpd_limit": "unlimited"
+    },
+    "gemini_3_flash_live": {
+      "id": "gemini-3-flash-live",
+      "task": "live_dialogue",
+      "rpm_limit": "unlimited",
+      "rpd_limit": "unlimited"
+    },
+    "gemini_2_5_audio_dialog": {
+      "id": "gemini-2.5-flash-native-audio-dialog",
+      "task": "native_audio_dialog",
+      "rpm_limit": "unlimited",
+      "rpd_limit": "unlimited"
     }
   }
 }
