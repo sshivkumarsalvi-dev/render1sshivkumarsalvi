@@ -4,11 +4,12 @@ import time
 import requests
 import uvicorn
 from typing import Optional, Dict, Any, List
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Security, Request, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-app = FastAPI(title="Jyoti AI Sovereign Cluster Engine")
+app = FastAPI(title="Jyoti AI Sovereign Cluster Engine - Render Tier")
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +27,31 @@ CONFIGS = {
     "hf_spaces": "hf_spaces.json"
 }
 
+# ================= RJS SECURITY / PASSWORD AUTHENTICATION =================
+RJS_EXPECTED_PASSWORD = os.getenv("RJS_PASSWORD", "")
+security_bearer = HTTPBearer(auto_error=False)
+
+def verify_rjs_auth(request: Request, creds: Optional[HTTPAuthorizationCredentials] = Security(security_bearer)):
+    """
+    Render सुरक्षा जाँच:
+    1. Header: 'x-rjs-password: <PASSWORD>'
+    2. Header: 'Authorization: Bearer <PASSWORD>'
+    """
+    if not RJS_EXPECTED_PASSWORD:
+        return True  # यदि Render एनवायरनमेंट में पासवर्ड सेट नहीं है तो अनुमति दें
+
+    header_pass = request.headers.get("x-rjs-password")
+    bearer_token = creds.credentials if creds else None
+
+    if header_pass == RJS_EXPECTED_PASSWORD or bearer_token == RJS_EXPECTED_PASSWORD:
+        return True
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Unauthorized: RJS_PASSWORD missing or invalid."
+    )
+
+# ================= JSON HELPERS =================
 def read_json(name: str) -> dict:
     path = CONFIGS.get(name)
     if path and os.path.exists(path):
@@ -107,7 +133,7 @@ def execute_groq(prompt: str, image_url: Optional[str] = None, pdf_base64: Optio
     if state.get("is_revoked") and now < state.get("revoked_until", 0.0):
         return None
 
-    api_key = os.getenv(cfg.get("env_key", "GROQ_API_OK"))
+    api_key = os.getenv("GROQ_API-UK") or os.getenv(cfg.get("env_key", "GROQ_API_OK"))
     if not api_key: return None
 
     is_multimodal = bool(image_url or pdf_base64)
@@ -204,7 +230,7 @@ def execute_gemini(prompt: str, image_base64: Optional[str] = None, pdf_base64: 
     if state.get("is_revoked") and now < state.get("revoked_until", 0.0):
         return None
 
-    api_key = os.getenv(cfg.get("env_key", "GEMINI-API-OK"))
+    api_key = os.getenv("GEMINI-API-UK") or os.getenv(cfg.get("env_key", "GEMINI-API-OK"))
     if not api_key: return None
 
     target = None
@@ -278,7 +304,7 @@ def execute_gemini(prompt: str, image_base64: Optional[str] = None, pdf_base64: 
 
     return None
 
-# ================= 3. SAMBANOVA (सटीक 120 RPD कुल कोटा) =================
+# ================= 3. SAMBANOVA =================
 def execute_sambanova(prompt: str, is_math: bool = False):
     cfg = read_json("sambanova")
     if not cfg: return None
@@ -302,20 +328,20 @@ def execute_sambanova(prompt: str, is_math: bool = False):
     if state.get("current_minute_requests", 0) >= cfg["limits"]["global_rpm"]:
         return None
 
-    api_key = os.getenv(cfg.get("env_key", "SAMBANOVA-API-OK"))
+    api_key = os.getenv("SAMBHANOVA-API-UK") or os.getenv(cfg.get("env_key", "SAMBANOVA-API-OK"))
     if not api_key: return None
 
     models = cfg["models"]
     target = None
 
     if is_math:
-        for k in ["deepseek_r1", "deepseek_v3"]:
+        for k in ["deepseek_r1", "deepseek_v3", "minimax_3"]:
             m = models.get(k)
             if m and not m["exhausted"] and m["used_today"] < m["rpd_limit"]:
                 target = m
                 break
     else:
-        for k in ["llama_70b", "llama_8b", "gemma_31b", "gpt_oss_120b"]:
+        for k in ["minimax_3", "minimax_2_7", "llama_70b", "llama_8b", "gemma_31b", "gpt_oss_120b"]:
             m = models.get(k)
             if m and not m["exhausted"] and m["used_today"] < m["rpd_limit"]:
                 target = m
@@ -350,7 +376,7 @@ def execute_sambanova(prompt: str, is_math: bool = False):
 
     return None
 
-# ================= 4. OPENROUTER (50 RPD कुल खाता कोटा) =================
+# ================= 4. OPENROUTER =================
 def execute_openrouter(prompt: str, image_url: Optional[str] = None):
     cfg = read_json("openrouter")
     if not cfg: return None
@@ -376,7 +402,7 @@ def execute_openrouter(prompt: str, image_url: Optional[str] = None):
     if state.get("current_minute_requests", 0) >= cfg["account_limits"]["global_rpm"]:
         return None
 
-    api_key = os.getenv(cfg.get("env_key", "OPENROUTER-API-OK"))
+    api_key = os.getenv("OPENROUTER-API-UK") or os.getenv(cfg.get("env_key", "OPENROUTER-API-OK"))
     if not api_key: return None
 
     msgs = [{"role": "system", "content": model_cfg.get("system_instruction", "")}]
@@ -416,7 +442,7 @@ def execute_openrouter(prompt: str, image_url: Optional[str] = None):
 
     return None
 
-# ================= 5. HF ZEROGPU (10 टोकन्स x 300s = 50 मिनट GPU, 120s Delay) =================
+# ================= 5. HF ZEROGPU (HF-API-1 से HF-API-10) =================
 def execute_hf_spaces(prompt: str):
     cfg = read_json("hf_spaces")
     if not cfg: return None
@@ -431,6 +457,10 @@ def execute_hf_spaces(prompt: str):
         return None
 
     tokens = cfg.get("tokens", [])
+    if not tokens:
+        tokens = [{"id": f"token_{i}", "env_key": f"HF-API-{i}", "used_gpu_sec": 0.0, "exhausted": False, "cooldown_until": 0.0} for i in range(1, 11)]
+        cfg["tokens"] = tokens
+
     curr_idx = state.get("current_token_index", 0)
     target_token = None
 
@@ -447,23 +477,25 @@ def execute_hf_spaces(prompt: str):
         write_json("hf_spaces", cfg)
         return None
 
-    api_key = os.getenv(target_token.get("env_key", ""))
+    env_name = target_token.get("env_key", f"HF-API-{curr_idx+1}")
+    api_key = os.getenv(env_name)
     if not api_key: return None
 
     t0 = time.time()
     try:
+        limits = cfg.get("limits", {"max_execution_timeout": 60, "gpu_seconds_per_token": 300, "cooldown_delay_seconds": 120})
         res = requests.post(
             cfg["api_endpoint"],
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={"data": [prompt]},
-            timeout=cfg["limits"].get("max_execution_timeout", 60)
+            timeout=limits.get("max_execution_timeout", 60)
         )
         duration = time.time() - t0
-        target_token["used_gpu_sec"] += duration
+        target_token["used_gpu_sec"] = target_token.get("used_gpu_sec", 0.0) + duration
 
-        if target_token["used_gpu_sec"] >= cfg["limits"]["gpu_seconds_per_token"]:
+        if target_token["used_gpu_sec"] >= limits.get("gpu_seconds_per_token", 300):
             target_token["exhausted"] = True
-            state["global_cooldown_until"] = time.time() + cfg["limits"]["cooldown_delay_seconds"]
+            state["global_cooldown_until"] = time.time() + limits.get("cooldown_delay_seconds", 120)
             state["current_token_index"] = (curr_idx + 1) % len(tokens)
         else:
             state["current_token_index"] = curr_idx
@@ -488,10 +520,13 @@ class UnifiedChatRequest(BaseModel):
     need_map: bool = False
     is_math: bool = False
 
+# Render Health-Check & Public Status Dashboard (खुला रहेगा)
 @app.get("/")
+@app.get("/health")
 def get_dashboard():
     return {
         "status": "online",
+        "cluster_tier": "Render_Primary",
         "groq": read_json("groq"),
         "gemini": read_json("gemini"),
         "sambanova": read_json("sambanova"),
@@ -499,8 +534,12 @@ def get_dashboard():
         "hf_spaces": read_json("hf_spaces")
     }
 
+# सुरक्षित चैट एंडपॉइंट (RJS_PASSWORD अनिवार्य)
 @app.post("/v1/chat")
-def handle_unified_chat(req: UnifiedChatRequest):
+def handle_unified_chat(req: UnifiedChatRequest, request: Request):
+    # RJS_PASSWORD सुरक्षा सत्यापन
+    verify_rjs_auth(request)
+
     # 1. OCR / विज़न / PDF (Qwen 3.8 27B -> Gemini Gemma/Flash OCR -> OpenRouter Gemma OCR)
     if req.image_url or req.image_base64 or req.pdf_base64:
         out = execute_groq(req.prompt, image_url=req.image_url, pdf_base64=req.pdf_base64)
@@ -548,6 +587,7 @@ def handle_unified_chat(req: UnifiedChatRequest):
 
     raise HTTPException(status_code=429, detail="CRITICAL: All 5 AI Providers exhausted their quotas and are locked for 24 hours.")
 
+# Render स्टार्टर पोर्ट बाइंडिंग
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 10000))[cite: 4]
+    uvicorn.run(app, host="0.0.0.0", port=port)[cite: 4]
