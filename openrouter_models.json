@@ -2,16 +2,24 @@
   "provider": "openrouter",
   "endpoint": "https://openrouter.ai/api/v1/chat/completions",
   "env_key": "OPENROUTER-API-OK",
-  "default_model": "meta-llama/llama-3.3-70b-instruct:free",
-  "limits": {
-    "rpm": 20,
-    "rpd": 200
+  "account_limits": {
+    "total_daily_rpd": 50,
+    "global_rpm": 20
   },
   "runtime_state": {
-    "total_requests": 0,
+    "requests_used_today": 0,
     "current_minute_requests": 0,
     "last_minute_timestamp": 0.0,
-    "is_rate_limited": false,
-    "cooldown_until": 0.0
+    "is_revoked": false,
+    "revoked_until": 0.0,
+    "last_daily_reset": 0.0
+  },
+  "primary_ocr_model": {
+    "id": "google/gemma-4-31b-it:free",
+    "task": "image_ocr_text_extraction_and_explanation",
+    "supports_inputs": ["text", "image_url"],
+    "system_instruction": "You are an expert OCR and vision analysis engine. Extract all visible text accurately from the provided image (including tables, bills, handwriting, and printed documents), format it cleanly, and provide a clear, helpful explanation to the user.",
+    "daily_cap": 50,
+    "exhausted": false
   }
 }
