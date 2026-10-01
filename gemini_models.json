@@ -1,17 +1,83 @@
 {
   "provider": "gemini",
-  "endpoint_template": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+  "rest_endpoint_template": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+  "websocket_live_endpoint": "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent",
   "env_key": "GEMINI-API-OK",
-  "default_model": "gemini-2.5-flash",
   "limits": {
-    "rpm": 15,
-    "rpd": 1500
+    "total_daily_rpd_cap": 7500,
+    "free_monthly_search_grounding": 5000,
+    "daily_safe_search_quota": 160,
+    "live_concurrent_sessions": 3
   },
   "runtime_state": {
-    "total_requests": 0,
-    "current_minute_requests": 0,
-    "last_minute_timestamp": 0.0,
-    "is_rate_limited": false,
-    "cooldown_until": 0.0
+    "total_platform_requests_today": 0,
+    "search_queries_used_today": 0,
+    "is_revoked": false,
+    "revoked_until": 0.0,
+    "last_daily_reset": 0.0
+  },
+  "ocr_vision_models": {
+    "flash_25_multimodal": {
+      "id": "gemini-2.5-flash",
+      "task": "dense_pdf_table_handwritten_ocr",
+      "supports": ["image", "pdf", "video", "audio"],
+      "rpd_limit": 1500,
+      "rpm_limit": 10,
+      "tpm_limit": 250000,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "flash_20_multimodal": {
+      "id": "gemini-2.0-flash",
+      "task": "general_ocr_diagram_vision",
+      "supports": ["image", "pdf", "video"],
+      "rpd_limit": 1500,
+      "rpm_limit": 15,
+      "tpm_limit": 1000000,
+      "used_today": 0,
+      "exhausted": false
+    }
+  },
+  "text_and_logic_models": {
+    "flash_lite_fast": {
+      "id": "gemini-2.0-flash-lite",
+      "task": "fast_chat_translation_extraction",
+      "supports": ["text"],
+      "rpd_limit": 1500,
+      "rpm_limit": 30,
+      "tpm_limit": 1000000,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "flash_thinking_deep": {
+      "id": "gemini-2.0-flash-thinking-exp-01-21",
+      "task": "math_logic_cot_reasoning",
+      "supports": ["text"],
+      "rpd_limit": 1500,
+      "rpm_limit": 10,
+      "tpm_limit": 250000,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gemma_open_weights": {
+      "id": "gemma-2-27b-it",
+      "task": "multilingual_raw_text_generation",
+      "supports": ["text"],
+      "rpd_limit": 1500,
+      "rpm_limit": 15,
+      "tpm_limit": 1000000,
+      "used_today": 0,
+      "exhausted": false
+    }
+  },
+  "live_voice_talk": {
+    "live_flash_voice": {
+      "id": "gemini-2.0-flash",
+      "protocol": "websocket_bidirectional",
+      "task": "realtime_voice_dialogue_camera",
+      "output_format": "audio/pcm;rate=24000",
+      "max_concurrent_sessions": 3,
+      "active_sessions": 0
+    }
   }
 }
