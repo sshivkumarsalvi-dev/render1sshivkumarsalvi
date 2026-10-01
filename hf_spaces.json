@@ -1,10 +1,9 @@
 {
   "provider": "hf_spaces",
-  "api_endpoint": "https://jyoti-chet.hf.space/api/predict",
   "limits": {
     "gpu_seconds_per_token": 300,
     "cooldown_delay_seconds": 120,
-    "max_execution_timeout": 60,
+    "max_execution_timeout": 120,
     "total_tokens": 10,
     "total_gpu_pool_seconds": 3000
   },
@@ -14,6 +13,40 @@
     "all_exhausted": false,
     "revoked_until": 0.0,
     "last_daily_reset": 0.0
+  },
+  "cluster_spaces": {
+    "image_studio": {
+      "name": "rjs_flux_image",
+      "repo_id": "Shivlal6660jyotilove/rjs_imges",
+      "endpoint": "https://shivlal6660jyotilove-rjs-imges.hf.space/api/predict",
+      "task": "hyper_realistic_flux_image_generation",
+      "gpu_tier": "ZeroGPU",
+      "active": true
+    },
+    "video_primary": {
+      "name": "rjs_minimax_omni_video",
+      "repo_id": "Shivlal6660jyotilove/h3_video",
+      "endpoint": "https://shivlal6660jyotilove-h3-video.hf.space/api/predict",
+      "task": "hybrid_cpu_gpu_video_pipeline",
+      "gpu_tier": "ZeroGPU",
+      "active": true
+    },
+    "video_secondary": {
+      "name": "rjs_video_backup",
+      "repo_id": "Shivlal6660/rjs_video",
+      "endpoint": "https://shivlal6660-rjs-video.hf.space/api/predict",
+      "task": "failover_video_generation",
+      "gpu_tier": "ZeroGPU",
+      "active": true
+    },
+    "music_studio": {
+      "name": "rjs_music_engine",
+      "repo_id": "Shivlal6660/music",
+      "endpoint": "https://shivlal6660-music.hf.space/api/predict",
+      "task": "audio_music_generation",
+      "gpu_tier": "ZeroGPU",
+      "active": true
+    }
   },
   "tokens": [
     {"id": 1, "env_key": "HF-API-1", "used_gpu_sec": 0.0, "exhausted": false, "cooldown_until": 0.0},
