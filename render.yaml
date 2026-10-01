@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: jyoti-sovereign-core
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: GROQ_API_OK
+        sync: false
+      - key: GEMINI-API-OK
+        sync: false
+      - key: SAMBANOVA-API-OK
+        sync: false
+      - key: OPENROUTER-API-OK
+        sync: false
+      - key: HF-API-1
+        sync: false
+      - key: HF-API-2
+        sync: false
+      - key: HF-API-3
+        sync: false
+      - key: HF-API-4
+        sync: false
+      - key: HF-API-5
+        sync: false
+      - key: HF-API-6
+        sync: false
+      - key: HF-API-7
+        sync: false
+      - key: HF-API-8
+        sync: false
+      - key: HF-API-9
+        sync: false
+      - key: HF-API-10
+        sync: false
