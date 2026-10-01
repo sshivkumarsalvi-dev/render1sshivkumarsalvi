@@ -4,11 +4,16 @@
   "limits": {
     "gpu_seconds_per_token": 300,
     "cooldown_delay_seconds": 120,
-    "max_execution_timeout": 60
+    "max_execution_timeout": 60,
+    "total_tokens": 10,
+    "total_gpu_pool_seconds": 3000
   },
   "runtime_state": {
     "current_token_index": 0,
-    "global_cooldown_until": 0.0
+    "global_cooldown_until": 0.0,
+    "all_exhausted": false,
+    "revoked_until": 0.0,
+    "last_daily_reset": 0.0
   },
   "tokens": [
     {"id": 1, "env_key": "HF-API-1", "used_gpu_sec": 0.0, "exhausted": false, "cooldown_until": 0.0},
