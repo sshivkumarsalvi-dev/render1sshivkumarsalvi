@@ -3,8 +3,8 @@
   "endpoint": "https://api.sambanova.ai/v1/chat/completions",
   "env_key": "SAMBANOVA-API-OK",
   "limits": {
-    "global_rpm": 20,
-    "total_platform_daily_cap": 4200
+    "total_platform_daily_cap": 120,
+    "global_rpm": 20
   },
   "runtime_state": {
     "total_requests_today": 0,
@@ -15,47 +15,44 @@
     "last_daily_reset": 0.0
   },
   "models": {
-    "deep_reasoning": {
+    "deepseek_r1": {
       "id": "DeepSeek-R1",
-      "task": "math_logic_cot_deep_reasoning",
-      "supports_inputs": ["text"],
-      "rpd_limit": 200,
+      "rpd_limit": 20,
       "rpm_limit": 20,
       "used_today": 0,
       "exhausted": false
     },
-    "general_reasoning": {
+    "deepseek_v3": {
       "id": "DeepSeek-V3",
-      "task": "general_heavy_reasoning",
-      "supports_inputs": ["text"],
-      "rpd_limit": 500,
+      "rpd_limit": 20,
       "rpm_limit": 20,
       "used_today": 0,
       "exhausted": false
     },
-    "flagship_chat": {
+    "llama_70b": {
       "id": "Meta-Llama-3.3-70B-Instruct",
-      "task": "core_dialogue_and_long_context",
-      "supports_inputs": ["text"],
-      "rpd_limit": 1000,
+      "rpd_limit": 20,
       "rpm_limit": 20,
       "used_today": 0,
       "exhausted": false
     },
-    "fast_chat": {
+    "llama_8b": {
       "id": "Meta-Llama-3.1-8B-Instruct",
-      "task": "low_latency_quick_chat",
-      "supports_inputs": ["text"],
-      "rpd_limit": 2000,
+      "rpd_limit": 20,
       "rpm_limit": 20,
       "used_today": 0,
       "exhausted": false
     },
-    "multilingual_ocr": {
-      "id": "gemma-3-27b-it",
-      "task": "multilingual_ocr_vision_extraction",
-      "supports_inputs": ["text", "image_url"],
-      "rpd_limit": 500,
+    "gemma_31b": {
+      "id": "gemma-3-31b-it",
+      "rpd_limit": 20,
+      "rpm_limit": 20,
+      "used_today": 0,
+      "exhausted": false
+    },
+    "gpt_oss_120b": {
+      "id": "openai/gpt-oss-120b",
+      "rpd_limit": 20,
       "rpm_limit": 20,
       "used_today": 0,
       "exhausted": false
